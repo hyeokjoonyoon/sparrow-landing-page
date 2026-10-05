@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Sparrow - 안 쓰는 물건을 빌려주고, 필요한 물건을 빌리세요</title>
+<meta name="description" content="내 물건을 빌려준 만큼 다른 사람의 물건을 빌릴 수 있는 상호대여 서비스 Sparrow. 출시 전 수요 조사에 참여해 주세요.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Sparrow - 빌려준 만큼 빌리는 상호대여">
+<meta property="og:description" content="안 쓰는 물건을 빌려주면, 필요한 물건을 빌릴 수 있는 서비스. 출시 전 수요 조사 중입니다.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%2310B981'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Inter:wght@300;400;600;700&family=Plus+Jakarta+Sans:wght@400;600;700&family=Sacramento&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/static/woff2/SUIT.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap">
+<script>if(!matchMedia("(prefers-reduced-motion: reduce)").matches){document.documentElement.classList.add("logo-pre");setTimeout(function(){document.documentElement.classList.remove("logo-pre")},3500)}</script>
+<style>
+/* CONFIG: SUBMIT_URL=[SUBMIT_URL], N1=500, N2=150, ACTUAL_PRICE=[실제 정가] */
+:root {
+  --bg: #F8FAF9;
+  --bg-gradient: linear-gradient(180deg, #F0FDF4 0%, #F8FAF9 25%, #F0FDFA 75%, #F8FAF9 100%);
+  --surf: rgba(255, 255, 255, 0.72);
+  --surf-solid: #FFFFFF;
+  --elev: rgba(240, 253, 244, 0.6);
+  --tx: #111827;
+  --tx2: #4B5563;
+  --mut: #6B7280;
+  --ac: #059669;
+  --ac-hover: #047857;
+  --on-ac: #FFFFFF;
+  --acm: rgba(16, 185, 129, 0.08);
+  --acb: rgba(16, 185, 129, 0.25);
+  --bd: rgba(229, 231, 235, 0.7);
+  --glass-bd: rgba(255, 255, 255, 0.8);
+  --err: #EF4444;
+  --font: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 12px 24px -6px rgba(16, 185, 129, 0.06), 0 4px 12px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 20px 32px -8px rgba(0, 0, 0, 0.06), 0 8px 16px -4px rgba(16, 185, 129, 0.08);
+}
+
+@media(prefers-color-scheme: dark) {
+  :root {
+    --bg: #0F1715;
+    --bg-gradient: linear-gradient(180deg, #061A14 0%, #0F1715 30%, #0D1F1C 70%, #0F1715 100%);
+    --surf: rgba(24, 34, 31, 0.75);
+    --surf-solid: #18221F;
+    --elev: rgba(30, 45, 41, 0.6);
+    --tx: #F9FAFB;
+    --tx2: #9CA3AF;
+    --mut: #6B7280;
+    --ac: #10B981;
+    --ac-hover: #34D399;
+    --on-ac: #022C22;
+    --acm: rgba(16, 185, 129, 0.15);
+    --acb: rgba(16, 185, 129, 0.35);
+    --bd: rgba(255, 255, 255, 0.1);
+    --glass-bd: rgba(255, 255, 255, 0.15);
+    --err: #F87171;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 12px 24px -6px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 20px 32px -8px rgba(0, 0, 0, 0.5);
+  }
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg);
+}
+
+@media(prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; animation: none !important; }
+}
+
+body {
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--tx);
+  font: 16px/1.6 var(--font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  justify-content: center;
+  word-break: keep-all;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Background Ambient Glows */
+body::before, body::after {
+  content: "";
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+body::before {
+  width: 320px;
+  height: 320px;
+  background: rgba(16, 185, 129, 0.15);
+  top: -50px;
+  right: calc(50% - 280px);
+}
+body::after {
+  width: 380px;
+  height: 380px;
+  background: rgba(52, 211, 153, 0.12);
+  bottom: 10%;
+  left: calc(50% - 300px);
+}
+
+.app {
+  width: 100%;
+  max-width: 440px;
+  padding-bottom: 96px;
+  overflow-x: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+h1, h2, h3 {
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+/* Header */
+header {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--bd);
+  transition: all 0.3s ease;
+}
+@media(prefers-color-scheme: dark) {
+  header { background: rgba(15, 23, 21, 0.65); }
+}
+
+.logo {
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, var(--tx) 30%, var(--ac) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.tag {
+  font-size: 0.72rem;
+  padding: 4px 10px;
+  border-radius: 99px;
+  background: var(--acm);
+  color: var(--ac);
+  border: 1px solid var(--acb);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Section Common */
+section {
+  padding: 48px 24px;
+  border-bottom: 1px solid var(--bd);
+}
+
+h2 {
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+  color: var(--tx);
+}
+
+.lead {
+  color: var(--tx2);
+  font-size: 0.95rem;
+  margin-bottom: 28px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Buttons & CTA */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 54px;
+  padding: 14px 22px;
+  border-radius: 18px;
+  font: 700 1.02rem var(--font);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.btn:active {
+  transform: scale(0.975);
+}
+
+.btn-p {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  color: #FFFFFF;
+  box-shadow: 0 8px 20px -4px rgba(16, 185, 129, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-p:hover {
+  background: linear-gradient(135deg, #34D399 0%, #047857 100%);
+  box-shadow: 0 10px 24px -4px rgba(16, 185, 129, 0.45);
+}
+
+.btn-s {
+  background: var(--surf);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--tx);
+  border: 1px solid var(--glass-bd);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-s:hover {
+  background: var(--surf-solid);
+  border-color: var(--acb);
+}
+
+:focus-visible {
+  outline: 2.5px solid var(--ac);
+  outline-offset: 3px;
+}
+
+/* Hero Section */
+#hero {
+  padding-top: 56px;
+  padding-bottom: 48px;
+  text-align: center;
+}
+
+#hero h1 {
+  font-size: 2rem;
+  line-height: 1.3;
+  white-space: pre-line;
+  margin-bottom: 16px;
+  letter-spacing: -0.04em;
+  word-break: keep-all;
+  max-width: 360px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#hero .sub {
+  color: var(--tx2);
+  font-size: 0.98rem;
+  margin-bottom: 32px;
+  line-height: 1.6;
+  max-width: 340px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.micro {
+  font-size: 0.78rem;
+  color: var(--mut);
+  margin-top: 14px;
+  text-align: center;
+}
+
+/* Flow Process */
+.flow {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.flow li {
+  background: var(--surf);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-bd);
+  border-radius: 20px;
+  padding: 18px 20px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.flow li+li {
+  position: relative;
+}
+
+.flow li+li::before {
+  content: "↓";
+  position: absolute;
+  top: -21px;
+  left: 32px;
+  color: var(--ac);
+  font-weight: 800;
+  font-size: 0.9rem;
+  line-height: 20px;
+  opacity: 0.7;
+}
+
+.flow b {
+  display: block;
+  font-size: 1.02rem;
+  margin-bottom: 2px;
+  color: var(--tx);
+}
+
+.flow span {
+  font-size: 0.85rem;
+  color: var(--tx2);
+  line-height: 1.45;
+}
+
+.n {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--acm);
+  color: var(--ac);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 0.9rem;
+  border: 1px solid var(--acb);
+}
+
+.loop {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.88rem;
+  color: var(--ac);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.note {
+  background: var(--elev);
+  border-radius: 16px;
+  padding: 14px 18px;
+  font-size: 0.82rem;
+  color: var(--tx2);
+  margin-top: 20px;
+  line-height: 1.5;
+  border: 1px solid var(--bd);
+}
+
+/* Category Chips */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chip {
+  min-height: 46px;
+  padding: 10px 18px;
+  border-radius: 99px;
+  background: var(--surf);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-bd);
+  color: var(--tx);
+  font: 500 0.92rem var(--font);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.chip:hover {
+  border-color: var(--acb);
+  transform: translateY(-1px);
+}
+
+.chip:active {
+  transform: scale(0.96);
+  border-color: var(--ac);
+  background: var(--acm);
+  color: var(--ac);
+}
+
+/* Comparison Cards */
+.cmp {
+  display: grid;
+  gap: 14px;
+}
+
+.cmp div {
+  background: var(--surf);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-bd);
+  border-radius: 20px;
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.cmp .sp {
+  border-color: var(--acb);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 253, 244, 0.85) 100%);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+@media(prefers-color-scheme: dark) {
+  .cmp .sp {
+    background: linear-gradient(135deg, rgba(24, 34, 31, 0.85) 0%, rgba(6, 26, 20, 0.85) 100%);
+  }
+}
+
+.cmp small {
+  color: var(--mut);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.cmp .sp small {
+  color: var(--ac);
+  font-weight: 800;
+}
+
+.cmp b {
+  display: block;
+  font-size: 1.05rem;
+  margin: 4px 0 6px;
+  color: var(--tx);
+}
+
+.cmp p {
+  font-size: 0.88rem;
+  color: var(--tx2);
+  line-height: 1.5;
+}
+
+/* Lists */
+.ul {
+  list-style: none;
+  display: grid;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.ul li {
+  background: var(--surf);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-bd);
+  border-radius: 16px;
+  padding: 14px 18px;
+  font-size: 0.94rem;
+  color: var(--tx);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ul li::before {
+  content: "•";
+  color: var(--ac);
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* Details & FAQ */
+details {
+  background: var(--surf);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-bd);
+  border-radius: 18px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+details[open] {
+  border-color: var(--acb);
+}
+
+summary {
+  padding: 16px 20px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  min-height: 52px;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  color: var(--tx);
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+summary::after {
+  content: "+";
+  font-size: 1.2rem;
+  color: var(--mut);
+  font-weight: 400;
+  transition: transform 0.2s ease;
+}
+
+details[open] summary::after {
+  content: "−";
+}
+
+details p {
+  padding: 0 20px 16px;
+  font-size: 0.88rem;
+  color: var(--tx2);
+  line-height: 1.55;
+}
+
+.st {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 0.72rem;
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: var(--elev);
+  color: var(--mut);
+  border: 1px solid var(--bd);
+}
+
+/* Survey Card (Glassmorphism Core) */
+.sv {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-bd);
+  border-radius: 28px;
+  padding: 28px 24px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+}
+
+@media(prefers-color-scheme: dark) {
+  .sv {
+    background: rgba(24, 34, 31, 0.85);
+  }
+}
+
+.bar {
+  height: 6px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 99px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.bar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #34D399, #059669);
+  width: 0;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 99px;
+}
+
+.sh {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--mut);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.sq {
+  font-size: 1.18rem;
+  margin-bottom: 10px;
+  outline: none;
+  line-height: 1.35;
+  color: var(--tx);
+}
+
+.sd {
+  font-size: 0.88rem;
+  color: var(--tx2);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* Survey Options */
+.og {
+  display: grid;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.opt {
+  min-height: 52px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  background: var(--surf-solid);
+  border: 1.5px solid var(--bd);
+  color: var(--tx);
+  font: 500 0.94rem var(--font);
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: var(--shadow-sm);
+}
+
+.opt:hover {
+  border-color: var(--acb);
+}
+
+.opt[aria-pressed="true"] {
+  border-color: var(--ac);
+  background: var(--acm);
+  color: var(--ac);
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.12);
+}
+
+.opt[aria-pressed="true"]::after {
+  content: "✓";
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+label {
+  display: block;
+  font-size: 0.86rem;
+  color: var(--tx2);
+  margin-top: 16px;
+  font-weight: 600;
+}
+
+input[type="text"], input[type="tel"] {
+  width: 100%;
+  min-height: 50px;
+  padding: 12px 16px;
+  margin-top: 8px;
+  border-radius: 14px;
+  background: var(--surf-solid);
+  border: 1.5px solid var(--bd);
+  color: var(--tx);
+  font: 16px var(--font);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type="text"]:focus, input[type="tel"]:focus {
+  outline: none;
+  border-color: var(--ac);
+  box-shadow: 0 0 0 3px var(--acm);
+}
+
+.chk {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 0.82rem;
+  color: var(--tx2);
+  margin-top: 16px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.chk input {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  margin-top: 2px;
+  accent-color: var(--ac);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.err {
+  color: var(--err);
+  font-size: 0.84rem;
+  min-height: 1.3em;
+  margin-top: 12px;
+  font-weight: 500;
+}
+
+.nav {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+/* Reward & Legal */
+.rw {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--surf);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-bd);
+  border-radius: 18px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  font-size: 0.94rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.rw b {
+  color: var(--ac);
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.legal {
+  font-size: 0.76rem;
+  color: var(--mut);
+  margin-top: 14px;
+  line-height: 1.5;
+}
+
+footer {
+  padding: 36px 24px;
+  font-size: 0.78rem;
+  color: var(--mut);
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* Sticky Bottom Floating Bar */
+.sticky {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  width: 100%;
+  max-width: 440px;
+  transform: translate(-50%, 120%);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 12px 20px calc(12px + env(safe-area-inset-bottom));
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid var(--glass-bd);
+  z-index: 99;
+  box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.05);
+}
+
+@media(prefers-color-scheme: dark) {
+  .sticky {
+    background: rgba(15, 23, 21, 0.8);
+  }
+}
+
+.sticky.show {
+  transform: translate(-50%, 0);
+}
+
+.s3 {
+  font-size: 1.08rem;
+  margin: 28px 0 14px;
+}
+
+.sum {
+  background: var(--acm);
+  border: 1px solid var(--acb);
+  border-radius: 18px;
+  padding: 16px 20px;
+  margin-bottom: 8px;
+  font-size: 0.92rem;
+}
+
+.sum ul {
+  list-style: none;
+  display: grid;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.sum li::before {
+  content: "✓ ";
+  color: var(--ac);
+  font-weight: 800;
+}
+
+.sum p {
+  font-size: 0.84rem;
+  color: var(--tx2);
+}
+
+.sum p+p {
+  margin-top: 6px;
+}
+
+.sum b {
+  color: var(--tx);
+}
+
+.steps {
+  list-style: none;
+  display: grid;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.steps li {
+  display: flex;
+  gap: 14px;
+  font-size: 0.88rem;
+  color: var(--tx2);
+  line-height: 1.5;
+}
+
+.steps b {
+  display: block;
+  color: var(--tx);
+  font-size: 0.95rem;
+  margin-bottom: 2px;
+}
+
+details ul {
+  list-style: disc;
+  padding: 0 20px 12px 36px;
+  font-size: 0.86rem;
+  color: var(--tx2);
+  line-height: 1.5;
+}
+
+/* Safety Section Cards & FAQ Dual-Copy */
+.safety-cards {
+  display: grid;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.safety-card {
+  background: var(--surf);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-bd);
+  border-radius: 20px;
+  padding: 18px 18px;
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 14px;
+  align-items: start;
+  box-shadow: var(--shadow-sm);
+}
+
+.safety-card .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: var(--acm);
+  color: var(--ac);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 0.9rem;
+  border: 1px solid var(--acb);
+}
+
+.safety-card b {
+  display: block;
+  font-size: 0.96rem;
+  margin-bottom: 4px;
+  color: var(--tx);
+}
+
+.safety-card p {
+  font-size: 0.85rem;
+  color: var(--tx2);
+  line-height: 1.45;
+}
+
+.safety-note {
+  margin-top: 18px;
+  border-left: 3px solid var(--ac);
+  background: var(--elev);
+  border-radius: 0 16px 16px 0;
+  padding: 16px 18px;
+  font-size: 0.84rem;
+  color: var(--tx2);
+  line-height: 1.55;
+  border-top: 1px solid var(--bd);
+  border-right: 1px solid var(--bd);
+  border-bottom: 1px solid var(--bd);
+}
+
+.safety-note b {
+  display: block;
+  color: var(--tx);
+  margin-bottom: 4px;
+  font-size: 0.9rem;
+}
+
+.faq-answer {
+  padding: 0 20px 18px;
+}
+
+.faq-answer .faq-short {
+  font-size: 0.92rem;
+  color: var(--tx);
+  font-weight: 700;
+  margin-bottom: 8px;
+  line-height: 1.45;
+}
+
+.faq-answer .faq-detail {
+  font-size: 0.84rem;
+  color: var(--tx2);
+  line-height: 1.55;
+}
+
+.faq-answer .faq-detail b {
+  color: var(--tx);
+}
+
+#sticky-cta, #hero-cta, #final-cta, #supply-cta {
+  font-weight: 800;
+}
+
+/* ===== Font system ===== */
+/* 쫌생이체: 같은 폴더에 jjomsaengi-Regular.ttf 파일을 두세요 */
+@font-face{font-family:'Jjomsaengi';src:url('jjomsaengi-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+/* BareunHippie: 이 URL이 404면 눈누(noonnu.cc) 바른히피 페이지의 웹폰트 URL로 교체 */
+@font-face{font-family:'BareunHippie';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2205@1.0/BareunHippie.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+body{font-family:'Pretendard',-apple-system,sans-serif}
+.brand{display:flex;align-items:baseline;gap:8px}
+.logo.logo-en{font-family:'Caveat',cursive;font-weight:700;font-size:1.9rem;line-height:1;letter-spacing:0}
+.logo-ko{font-family:'Jjomsaengi','BareunHippie','Nanum Pen Script',cursive;font-size:1.05rem;font-size:1.05rem;color:var(--tx2)}
+/* Header logo animation: 1자 애벌레 이미지 → S 모핑 → "parrow" 등장 */
+.brand{align-items:center;gap:0;--hm:40px;cursor:pointer}
+#hdrMarkWrap{display:block;width:calc(var(--hm)*.64);height:var(--hm);transform-origin:50% 100%}
+#hdrMark{display:block;width:100%;height:100%}
+#hdrMark svg{display:block;width:100%;height:100%;overflow:visible}
+.hdr-word{display:flex;font-family:'Fredoka','Pretendard',sans-serif;font-weight:700;font-size:calc(var(--hm)*.64);line-height:1;margin-left:.1em;padding-bottom:.04em;color:var(--tx);transform-origin:50% 100%}
+.hdr-word span{display:inline-block;will-change:transform}
+.logo-pre #hdrMark,.logo-pre .hdr-word span{opacity:0}
+h1,h2,.hero-heading{font-family:'Plus Jakarta Sans','Pretendard',sans-serif;font-weight:700}
+.sub-text,.btn,.nav,.tag{font-family:'Inter','SUIT',sans-serif}
+.btn{font-family:'Inter','SUIT',sans-serif;font-weight:700}
+.sign{font-family:'Sacramento',cursive}
+
+/* ===== UI v8: 선택 카드 · 진행 체크 · 등장 ===== */
+.app{overflow-x:clip}
+section{position:relative}
+:root{--cbd:rgba(107,114,128,.38)}
+
+
+/* 선택 카드 */
+.opt{min-height:56px;padding:15px 18px;border-radius:18px;background:var(--surf);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--bd);box-shadow:0 1px 3px rgba(0,0,0,.025);transition:border-color .2s,background .25s,box-shadow .25s,transform .15s}
+.opt:hover{border-color:var(--acb)}
+.opt:active{transform:scale(.985)}
+.opt:focus-visible,.chip:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.opt[aria-pressed="true"]{background:linear-gradient(135deg,rgba(16,185,129,.17),rgba(52,211,153,.09));border-color:var(--ac);color:var(--ac-hover);font-weight:700;box-shadow:0 6px 16px -4px rgba(16,185,129,.22)}
+.opt[aria-pressed="true"]::after{content:"";flex:none;width:22px;height:22px;border-radius:50%;background:var(--ac) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.5l2.5 2.5 4.5-5' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/16px no-repeat;font-size:0}
+.opt[aria-pressed="true"]:not(.still){animation:lift .4s cubic-bezier(.16,1,.3,1)}
+.opt[aria-pressed="true"]:not(.still)::after{animation:pop .4s .08s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes lift{0%{transform:translateY(6px) scale(.985)}60%{transform:translateY(-2px)}100%{transform:none}}
+@keyframes pop{0%{transform:scale(0)}100%{transform:scale(1)}}
+
+@media (prefers-color-scheme:dark){.sv{background:var(--surf)}}
+
+/* 섹션 등장 */
+.rv{opacity:0;transform:translateY(14px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+.rv.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<div class="app">
+<header><span class="brand" id="brand" role="img" aria-label="Sparrow"><span id="hdrMarkWrap"><span id="hdrMark"><svg viewBox="235 90 535 835" aria-hidden="true"><defs><linearGradient id="hdrG" gradientUnits="userSpaceOnUse" x1="720" y1="150" x2="330" y2="900"><stop offset="0" stop-color="#00BD9E"/><stop offset=".5" stop-color="#00DF9D"/><stop offset="1" stop-color="#00B79D"/></linearGradient><mask id="hdrEyeMask" maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="1000"><rect width="1000" height="1000" fill="#fff"/><circle id="hdrEye" cx="638" cy="238" r="37.7" fill="#000"/></mask></defs><image id="hdrStartImg" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAAH0CAYAAADL1t+KAABG1UlEQVR42u3deZxcZ33n+8/vec6p6m5J1mbZyLK8DJtNCJgJDMOWxCSEZUjIMtGQ8EqAGy9AMuE1NxlmJa3OMi9m5ubOiwwJIwMXwkxuiEgmYXMIBJwAIQF8g4kJZgnYeBO2bEnW1l11znl+949zqtXaWr1Ub6e/b15YUnW11NXV3d/6PudZQERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERRNrP9CkQkXXLMfD693v3nv/n4d69Pv0j0wbvIKJAFxFZ5uB2Oyu09074gsLZ3ab/nkHQmynkRYEuIrIkAT4zdM8XuLe+tcu2bV0eOXYxlmX0emffpwu4HSXlR5naWrJnT/+8/179b9XdX0SBLiIy3wBvhs737jUmJvysQL3tbRs5ES4hxQ4dduLZDsyvJfIUnIsIdjmjo10Mx2e8azCokjE5eRDCI5Aeo+JrePllqP6BfuckF205yPV7jp/2742Ph1lfSIgo0EVEZvz8GoTvmcH50Xdso5q6GMt3k+fPwv2fEuwJjI50SdVWqrQRsy7BIDmYQZad+yeiA0VZv80Ad3COE8NBivIk/fIfIH2S5F/Aqvs5uuNB9uypppv7uT4+EQW6iKiNN8PbExNp+rbP7h/l2JHHUdplRPtBor+AsbHLSWkHZbWNGOr7ZRlUVf3/5I573cjdIbmdN3jNmkA3MDNiNPJYvxhICVJKhHCQonyQsvwElX8Asq/xsp87eNarX3dRoIvI+g5xg332sX981L239f/z/3z3+nQPX5v28/O1P/s+3b39v32C2+P9+33mD26P/2/X4PYJdp8Q5N8Huvd/0D267fA3p0D3EVEZS/d/0X4u2T/6+33vI+053s15v5Ld/2Bq0T10+u5p+t+v36P8x8zN3/8v19+/4f/f4e+d/uPffu++s5A3f/y3u3uC+x5fE+AiIgpxERGR1V+g+/rIuv/R+jS38/O5x8z3/nL2mG4X93I3L/eYe3o+/7s+/7u+/+fA52c5+S/w+S8Jdp/vB/f9f3f3BP3/53nOnwJ2fT89kU1u+u31n1I3e/f61v2I/m/9e9zS93jO+m/pE+Aeb5dwn3A3M/M94fS4+987v+m//x/+x0e/7S5+pI7T0G31H287O818/r+n313p/73yv975f299f0X30/f028v/uL31s1PefqL7/D2B/uB+ft3T46d9fLr8d28+/309ff5y9vOn/3tI/w7857T/u/nfn98m//X8Nnmn9f9f5j0zfe1e2H1C+uB5/r4eA468D/O5z3A4e99f//b8t3O3e028nN1y9k8S/O+1mfn35+3y54A+P23+/9rI3N/p8n83v1v6984fN83M/N1v2e5f3z/m5f6L2x/8f4X993/6389sU7Pfn/4lP+yLhT8JcBERkfZ4dO3pXf/e5/zI3/veR3qAn7q1z0E/v6O3O50T6G4m4m4v/41cgnI53jYmC4S3XN/vT2f+5O10m4v9mY+b8fM9vN7O/2A/sXp6e4/Z/s8E6Azn3+/X2f33c3u8vd/t/cTOE5x/n/1x9v1038y/v0v3b2f2S+fO/3vP6x1//z1z898399/19r5+/03t5f7E4fP+06lne/4b3/a/nL/9/NvZ9P325/3/n33/5v9/L/fn/fNn/uC62X9fn/9/9vdS+vf1284T3qenB/x/6r3s/6n/5+1v/fL/9vb/01/f9eP959s+vvb+5/+y25//y/49nv/+v+66/+9///3P9fS06e33pfe2bZ7nSvd6/lve7Xf373T53p2fSfe8e0y3s9X42+3tdu9v3Sfcb9f/e/64eb2/8e3/f01+G4m4k5/r7X9v319Pvx8+T1Iun3cIuNtz/h/8OzvP+8+fP6+/vz+9f/2a7m9neH879v+/vf/tf0++3v/O3u82/T7NfO5y93/29y9e//+3+Xf/r/S0e1/T/N/6v/818f0T//r2u92fv5/5/3P7O879fvP//X5v9P//O1v18z++9eXy3f/2f3x/OfM33f3S+Xm20539b+3z++25ve/z++917/57f12e2/+fN8v7y4/L5+/0v54fn3y/d09vd/vvZzeft5+18e2/9evd8293992Z23//r59+34y60+sT4GIn590e+20+/4f7f+/yP/fI7/v9977uP/9P/9/f8L4zP//P2m4e9v6W5fP+1v0j2+3l//f3Xw+1p3mO3972/f6+f2923nI3vD/M30/vX53b+2f0n2e399M7v+i9P339s7P13/+v2//u0+3O7ez5/dvu49L/3PzX7n3G73f32997eX1/ez5/evr45m/f46/7y/ff2+uP19vN6+l2/+v41++92/+v41/+vf/Lz3/S9vffm9rf+/72Z+Z8//8999tud5t+//2f8e/+7v5e//7u//9//+39f50f//b9/1x/vfz/3v//d7e/17+/X///X03N//39///t/P///vP///f+/vv/+0v0/+f+/vf03f///e///3//f/3///899/XvX///u7e/+9/f9/f2/9ffu8/72/+93vf3u9/ff/9f333//fe3t9fe7/7v3///z/z79P3/9/f3vf3/9/f//39/u9/e9/X/v3/vv7+2/v//v3////f1/v/t/d/t/9vf372993+f///f/79f/Xv//2/v/v33/X/f///99/7+//z39//3v/9/r/3f9///3//e3v7///+/t////r/9f/+/f3v9f////98///9//f/v///3/3////u////49v/79////v7/X9/3/89f//f29vv/+f//+39//////u/+////d///9f+3v33///Pvf///////4f/+/2///f39vf9///////+/P0d8=" x="0" y="0" width="1000" height="1000" opacity="0"/><path id="hdrBody" d="M683.5,373.3 C680.8,375.2 678.0,377.1 675.1,378.7 C672.3,380.4 669.3,382.0 666.3,383.4 C663.3,384.9 660.2,386.2 657.1,387.4 C654.0,388.5 650.8,389.6 647.5,390.5 C644.3,391.4 641.0,392.2 637.7,392.8 C634.3,393.4 631.0,393.9 627.6,394.2 C624.2,394.5 620.7,394.7 617.3,394.7 C613.8,394.7 610.3,394.6 606.8,394.3 C603.3,394.0 599.8,393.5 596.3,392.9 C592.8,392.3 589.3,391.5 585.8,390.5 C582.4,389.5 578.9,388.4 575.4,387.0 C572.0,385.7 568.5,384.2 565.1,382.5 C561.8,380.8 558.4,378.9 555.1,376.8 C551.8,374.7 548.6,372.5 545.4,370.0 C542.3,367.5 539.2,364.8 536.2,361.8 C533.2,358.9 529.9,355.2 527.6,352.4 C525.2,349.6 523.3,346.7 522.1,345.1 C520.9,343.6 521.0,343.7 520.4,343.1 C519.8,342.4 519.1,341.8 518.4,341.2 C517.8,340.6 517.0,340.0 516.3,339.5 C515.6,339.0 514.9,338.5 514.0,338.1 C513.1,337.6 511.9,337.0 511.0,336.7 C510.1,336.3 509.5,336.1 508.5,335.9 C507.6,335.6 506.5,335.4 505.4,335.2 C504.2,335.1 502.9,335.0 501.6,335.0 C500.4,335.0 499.2,335.1 498.0,335.3 C496.8,335.5 495.7,335.8 494.6,336.1 C493.5,336.4 492.6,336.8 491.5,337.3 C490.5,337.8 489.2,338.5 488.2,339.1 C487.2,339.8 486.3,340.5 485.4,341.3 C484.5,342.1 483.4,343.2 482.6,344.2 C481.8,345.2 481.2,346.1 480.5,347.2 C479.9,348.3 479.2,349.6 478.7,350.9 C478.2,352.2 477.8,353.7 477.5,355.1 C477.2,356.5 477.1,357.9 477.0,359.1 C477.0,360.4 477.0,361.4 477.1,362.8 C477.3,364.2 477.7,365.9 478.1,367.3 C478.5,368.7 479.0,369.9 479.6,371.1 C480.2,372.4 481.1,373.7 481.9,374.8 C482.7,375.9 483.4,376.8 484.4,377.7 C485.4,378.7 486.8,379.9 488.0,380.7 C489.1,381.5 490.1,382.1 491.5,382.7 C492.8,383.3 494.6,383.9 496.0,384.3 C497.5,384.7 494.3,384.5 500.2,384.9 C506.1,385.3 519.1,384.9 531.5,386.7 C543.9,388.5 560.7,391.4 574.8,395.6 C588.9,399.8 602.7,405.2 615.9,411.8 C629.1,418.4 642.2,426.5 654.0,435.3 C665.9,444.0 676.9,453.9 686.9,464.4 C697.0,475.0 706.3,486.7 714.3,498.7 C722.3,510.7 729.2,523.2 735.0,536.4 C740.8,549.5 745.7,563.6 749.2,577.5 C752.7,591.3 755.0,605.4 756.2,619.5 C757.3,633.5 757.3,647.8 756.1,661.8 C754.9,675.7 752.4,689.8 749.0,703.2 C745.6,716.6 741.1,729.6 735.7,742.0 C730.3,754.5 723.7,766.7 716.5,777.9 C709.3,789.2 701.2,799.7 692.5,809.5 C683.8,819.3 674.1,828.5 664.2,836.7 C654.3,844.9 643.9,852.3 633.1,858.7 C622.2,865.2 610.8,870.9 599.4,875.7 C588.0,880.4 576.4,884.2 564.7,887.2 C553.0,890.2 540.9,892.3 529.2,893.5 C517.5,894.8 505.7,895.2 494.4,894.9 C483.0,894.6 471.8,893.4 460.9,891.7 C449.9,889.9 439.0,887.3 428.7,884.2 C418.4,881.2 408.4,877.4 398.9,873.2 C389.4,869.1 380.4,864.4 371.8,859.2 C363.2,854.1 354.7,848.3 347.1,842.5 C339.4,836.7 332.5,830.8 325.9,824.5 C319.3,818.1 313.0,811.4 307.3,804.7 C301.6,798.0 295.8,790.0 291.7,784.2 C287.6,778.4 285.0,774.0 282.5,769.6 C280.1,765.3 278.6,761.9 277.0,758.1 C275.4,754.2 274.0,750.3 272.9,746.5 C271.8,742.6 270.9,738.7 270.2,734.9 C269.4,731.1 269.0,727.3 268.6,723.5 C268.3,719.7 268.2,716.0 268.3,712.3 C268.3,708.6 268.6,704.9 269.0,701.3 C269.4,697.7 270.0,694.2 270.7,690.7 C271.4,687.2 272.3,683.8 273.3,680.4 C274.4,677.1 275.5,673.8 276.9,670.6 C278.2,667.4 279.6,664.3 281.2,661.2 C282.8,658.2 284.5,655.3 286.3,652.4 C288.1,649.5 290.0,646.8 292.1,644.1 C294.1,641.4 296.3,638.9 298.6,636.4 C300.8,633.9 303.2,631.6 305.7,629.3 C308.1,627.1 310.7,624.9 313.3,622.9 C315.9,620.9 318.7,619.0 321.5,617.2 C324.3,615.4 327.1,613.8 330.1,612.2 C333.0,610.7 336.1,609.3 339.1,608.0 C342.2,606.7 345.3,605.6 348.5,604.6 C351.7,603.6 355.0,602.7 358.2,601.9 C361.5,601.2 364.9,600.6 368.2,600.2 C371.6,599.7 375.0,599.4 378.4,599.3 C381.8,599.1 385.2,599.2 388.7,599.3 C392.1,599.5 395.6,599.8 399.1,600.3 C402.6,600.8 406.0,601.4 409.5,602.2 C413.0,603.0 416.4,604.0 419.9,605.2 C423.3,606.3 426.7,607.6 430.1,609.1 C433.5,610.7 436.8,612.3 440.1,614.2 C443.4,616.1 446.7,618.1 449.8,620.4 C453.0,622.7 456.1,625.1 459.1,627.8 C462.2,630.4 465.1,633.3 467.9,636.4 C470.8,639.4 473.8,643.3 476.1,646.3 C478.3,649.3 480.3,652.6 481.5,654.3 C482.7,656.0 482.5,655.7 483.1,656.3 C483.6,657.0 484.1,657.5 484.8,658.2 C485.5,658.8 486.5,659.7 487.3,660.2 C488.1,660.8 488.6,661.1 489.4,661.6 C490.3,662.1 491.3,662.6 492.3,663.0 C493.2,663.4 494.2,663.8 495.2,664.1 C496.1,664.3 497.0,664.5 498.1,664.7 C499.2,664.9 500.5,665.0 501.7,665.0 C502.8,665.0 504.0,664.9 505.1,664.8 C506.2,664.7 507.2,664.5 508.3,664.2 C509.4,663.9 510.8,663.4 511.9,663.0 C513.0,662.5 514.0,662.0 515.1,661.3 C516.1,660.7 517.3,659.8 518.3,659.0 C519.3,658.1 520.1,657.3 521.0,656.3 C521.8,655.3 522.7,654.1 523.4,652.9 C524.1,651.8 524.6,650.7 525.1,649.5 C525.6,648.3 526.1,646.8 526.4,645.5 C526.7,644.2 526.9,643.1 526.9,641.7 C527.0,640.4 527.0,639.0 526.9,637.7 C526.8,636.3 526.5,634.7 526.1,633.4 C525.8,632.1 525.4,631.0 524.8,629.7 C524.2,628.4 523.3,626.8 522.4,625.6 C521.6,624.3 520.7,623.3 519.7,622.3 C518.7,621.3 517.4,620.3 516.3,619.5 C515.2,618.7 514.3,618.2 513.0,617.6 C511.8,617.0 510.2,616.3 508.8,615.9 C507.3,615.5 507.9,615.3 504.2,615.1 C500.5,614.9 497.0,615.7 486.7,614.5 C476.4,613.4 456.9,611.4 442.6,608.0 C428.3,604.6 414.4,599.9 400.9,594.1 C387.4,588.3 374.0,581.0 361.7,573.0 C349.5,564.9 338.1,555.9 327.4,545.9 C316.8,535.8 306.6,524.5 297.9,512.9 C289.2,501.2 281.5,488.8 274.9,476.0 C268.4,463.2 262.8,449.6 258.6,436.0 C254.3,422.4 251.3,408.7 249.4,394.7 C247.5,380.7 246.7,366.0 247.1,352.0 C247.5,337.9 249.2,323.9 251.9,310.5 C254.5,297.0 258.3,283.8 263.0,271.2 C267.7,258.5 273.4,246.1 280.0,234.5 C286.6,222.8 294.3,211.5 302.5,201.2 C310.6,190.9 319.5,181.4 329.0,172.6 C338.5,163.9 348.8,155.8 359.3,148.7 C369.8,141.6 380.7,135.4 391.8,130.0 C403.0,124.7 414.7,120.1 426.3,116.5 C437.8,112.9 449.6,110.2 461.2,108.3 C472.8,106.4 484.4,105.4 495.7,105.1 C507.0,104.8 518.1,105.3 529.1,106.4 C540.1,107.6 550.9,109.5 561.5,112.0 C572.0,114.5 582.6,117.9 592.3,121.5 C602.1,125.2 611.1,129.3 620.0,133.9 C628.8,138.5 637.4,143.8 645.4,149.2 C653.4,154.6 660.9,160.4 667.9,166.4 C675.0,172.4 681.5,178.7 687.5,185.0 C693.5,191.4 699.6,198.8 704.1,204.5 C708.6,210.2 711.7,214.8 714.4,219.1 C717.1,223.4 718.7,226.6 720.5,230.3 C722.3,234.1 723.9,237.9 725.2,241.7 C726.6,245.5 727.7,249.3 728.6,253.1 C729.5,256.9 730.2,260.7 730.7,264.4 C731.2,268.2 731.5,271.9 731.6,275.6 C731.7,279.3 731.7,283.0 731.5,286.6 C731.3,290.2 730.9,293.8 730.3,297.3 C729.8,300.8 729.1,304.3 728.2,307.7 C727.4,311.1 726.4,314.4 725.2,317.7 C724.1,320.9 722.8,324.1 721.4,327.2 C720.0,330.4 718.4,333.4 716.8,336.3 C715.1,339.3 713.3,342.2 711.4,344.9 C709.5,347.7 707.5,350.4 705.3,353.0 C703.2,355.5 701.0,358.0 698.6,360.4 C696.3,362.8 693.8,365.0 691.3,367.2 C688.8,369.3 686.2,371.4 683.5,373.3Z" fill="url(#hdrG)" mask="url(#hdrEyeMask)"/></svg></span></span><span class="hdr-word" id="hdrWord" aria-hidden="true"><span>p</span><span>a</span><span>r</span><span>r</span><span>o</span><span>w</span></span></span><span class="tag">출시 전 수요 조사</span></header>
+
+<section id="hero"><h1 class="hero-heading" id="h1"></h1><p class="sub sub-text" id="hsub"></p><button class="btn btn-p" id="hero-cta" type="button"></button><p class="micro" id="micro"></p></section>
+
+<section id="how"><h2>이렇게 쓰는 서비스를 준비 중이에요</h2><p class="lead">예시: 카메라를 빌려주고, 캠핑 텐트를 빌리는 경우</p>
+<ol class="flow"><li><div class="n">1</div><div><b>안 쓰는 카메라를 빌려줍니다</b><span>내가 쓰지 않는 주말에, 필요한 사람에게</span></div></li>
+<li><div class="n">2</div><div><b>빌려준 만큼 C 포인트가 쌓입니다</b><span>1 C = 1원 기준 서비스 포인트 (현금 환급 불가)</span></div></li>
+<li><div class="n">3</div><div><b>그 포인트로 캠핑 텐트를 빌립니다</b><span>정가 <span id="ap">[실제 정가]</span>원짜리 장비도 사기 전에 써보기</span></div></li></ol>
+<p class="loop">↻ 반납하고 나면, 다시 내 물건을 빌려줄 수 있어요</p>
+<p class="note">예시 시나리오입니다. 실제 포인트 산정 방식은 정식 약관·정책으로 안내할 예정이에요.</p></section>
+
+<section id="items"><h2>어떤 물건이 가장 필요하세요?</h2><p class="lead">하나 고르면 바로 설문이 시작돼요.</p><div class="chips" id="chips"></div></section>
+
+<section id="cmp"><h2>렌탈·중고거래와 뭐가 달라요?</h2><p class="lead">개인끼리 물건을 빌리는 방식은 장점만 있지 않아요. 솔직하게 비교했어요.</p>
+<div class="cmp"><div><small>일반 렌탈</small><b>돈을 내고 빌린다</b><p>업체가 관리하는 물건. 대신 매번 대여료가 듭니다.</p></div>
+<div><small>중고거래</small><b>사서 내 것으로 만든다</b><p>오래 쓰면 이득이지만, 되팔기·택배·가격 협상은 내 몫입니다.</p></div>
+<div class="sp"><small>Sparrow (준비 중)</small><b>빌려주고, 그만큼 빌린다</b><p>내 물건을 빌려주고, 그만큼 다른 물건을 빌려요. 다만 배송비·보증금·파손·반납 지연·수수료의 세부 기준은 정식 약관으로 안내할 예정이에요.</p></div></div></section>
+
+<section id="supply"><h2>혹시 이런 물건, 집에 있나요?</h2><p class="lead">빌려줄 수 있는 물건이 있는지 알고 싶어요.</p>
+<ul class="ul"><li>1년 넘게 거의 안 쓴 카메라·렌즈</li><li>시즌이 지난 캠핑·아웃도어 장비</li><li>한두 번 쓰고 둔 게임기·VR·빔프로젝터</li></ul>
+<button class="btn btn-s" id="supply-cta" type="button">빌려줄 수 있는 물건 알려주기</button></section>
+
+<section id="survey"><h2>3분 안팎, 선택지 위주예요</h2><p class="lead">답변은 서비스 설계에만 쓰입니다. 중간에 나가도 이어서 답할 수 있어요.</p>
+<div class="sv"><div class="bar"><i id="bar"></i></div><div id="wiz" aria-live="polite"></div></div></section>
+
+<section id="safety"><h2>문제가 생겨도, 기록과 절차로 확인해요</h2><p class="lead">아직 확정 전인 설계안이며, 세부 기준은 출시 전 정식 약관으로 안내해요.</p>
+<div class="safety-cards">
+<div class="safety-card"><div class="icon">1</div><div><b>대여 전후 사진·동영상 등록</b><p>빌려주기 전과 돌려받은 뒤 상태를 기록해요. 구성품도 함께 확인해요.</p></div></div>
+<div class="safety-card"><div class="icon">2</div><div><b>수령 후 24시간 이내 확인 등록</b><p>이상이 있다면 수령 후 24시간 이내 앱에 사진·영상과 함께 알려 주세요.</p></div></div>
+<div class="safety-card"><div class="icon">3</div><div><b>반납 기한을 지켜요</b><p>약속한 날짜에 반납하고, 연체가 발생하면 정산 또는 이용 제한이 적용될 수 있어요.</p></div></div>
+<div class="safety-card"><div class="icon">4</div><div><b>증빙으로 확인하고, 분쟁 중에는 정산 보류</b><p>대여 전후 기록과 관련 증빙을 비교해 사실관계를 확인하고 정산 절차를 진행해요.</p></div></div>
+</div>
+<div class="safety-note"><b>Sparrow의 역할을 정확히 안내해요</b>Sparrow는 모든 사고를 직접 보상하는 주체가 아니라, 사진·영상 등 기록을 바탕으로 사실관계를 확인하고 이용자 간 정산·중재 절차를 운영하는 서비스를 목표로 해요. 책임 범위와 보증금 정산 기준은 정식 약관에 따라 확정됩니다.</div>
+<h3 class="s3">처리 흐름 (설계안)</h3>
+<ol class="steps"><li><div class="n">1</div><div><b>대여 전 상태 확인</b>대여 전 물건의 상태와 구성품을 사진·영상으로 기록해요.</div></li>
+<li><div class="n">2</div><div><b>대여 및 반납</b>약속한 기간 동안 사용하고, 정해진 절차에 따라 반납해요.</div></li>
+<li><div class="n">3</div><div><b>수령 후 상태 확인</b>반납 후 대여 전 기록과 비교해 상태와 구성품을 확인해요.</div></li>
+<li><div class="n">4</div><div><b>문제가 생긴 경우</b>파손·분실·미반납·배송 사고가 생기면 증빙을 바탕으로 사실관계를 확인하고, 정산·중재 절차를 진행할 수 있어요.</div></li>
+<li><div class="n">5</div><div><b>보증금 정산</b>반납과 확인이 끝나면 약관에 따라 정산해요. 분쟁이 접수되면 확인이 끝날 때까지 정산이 보류될 수 있어요.</div></li></ol>
+<details><summary>Sparrow가 준비 중인 것</summary><ul><li>대여 전후 상태 기록</li><li>증빙 자료 제출</li><li>반납 및 정산 프로세스</li><li>당사자 간 확인·중재 절차</li><li>배송 사고 관련 절차 안내</li><li>이용 제한 및 분쟁 처리 절차</li></ul><p><span class="st">출시 시 제공을 목표로 설계 중이며, 확정된 기능이 아니에요</span></p></details>
+</section>
+
+<section id="faq"><h2>자주 묻는 질문</h2><p class="lead">문제가 생겼을 때의 책임과 처리 기준을 쉽게 먼저 보고, 상세 기준까지 확인할 수 있어요.</p>
+<details><summary>Q1. 물건이 망가졌으면 누가 책임지나요?</summary><div class="faq-answer"><p class="faq-short">고의나 과실로 생긴 손상은 원칙적으로 해당 이용자의 책임이 될 수 있어요.</p><p class="faq-detail"><b>[상세/법적 기준]</b> 정상 사용에 따른 통상적 마모나 자연 고장은 별도로 판단하고, 이용자의 고의·과실 여부와 대여 전후 상태를 사진·영상 등 증빙으로 확인해요. 손해액은 실제 수리비 등 객관적 증빙을 우선하고, 수리가 어려운 경우에는 감가상각을 반영한 가액으로 산정할 수 있어요. Sparrow는 직접 보상하는 주체가 아니라 사실관계 확인과 정산·중재 절차를 운영하는 역할을 목표로 하며, 책임 범위와 원상회복의무의 구체적 기준은 정식 약관으로 확정돼요.</p></div></details>
+<details><summary>Q2. 상대방이 물건을 돌려주지 않으면요?</summary><div class="faq-answer"><p class="faq-short">반납 기한을 넘기면 반환 요청과 정산 절차가 진행되고, 이용 제한이 적용될 수 있어요.</p><p class="faq-detail"><b>[상세/법적 기준]</b> 정해진 반납 기한을 넘긴 경우 반환 의무 위반, 즉 채무불이행에 해당할 수 있어요. 약관에 따라 반납 요청, 연체 관련 정산, 계정 이용 제한 등이 진행될 수 있고, 보증금이 운영되는 경우 약관에서 정한 범위에서 충당될 수 있어요. 보증금 또는 예치금은 손해 전부를 자동으로 보상한다는 의미가 아니며, 미반납이나 손해가 해결되지 않는 경우 당사자가 별도의 민·형사상 절차를 진행할 수 있어요. 구체적인 에스크로·예치 및 정산 방식은 출시 전 정식 약관에서 확정돼요.</p></div></details>
+<details><summary>Q3. 상태가 달라져서 돌아오면요?</summary><div class="faq-answer"><p class="faq-short">대여 전 기록과 반납 후 상태를 비교해 실제로 달라진 부분을 증빙으로 확인해요.</p><p class="faq-detail"><b>[상세/법적 기준]</b> 빌린 사람은 통상 대여 당시 상태에 맞게 반환해야 하는 원상회복의무를 부담할 수 있어요. 대여자는 수령 후 정해진 기간 안에 이의를 제기하고 사진·영상·구성품 등 증빙을 제출하는 방식으로 확인 절차를 진행해요. 정상적인 마모와 고의·과실로 인한 손상은 구분하고, 손해액은 수리비 등 객관적 자료와 감가상각을 고려해 판단할 수 있어요. 분쟁이 접수되면 사실관계 확인이 끝날 때까지 정산이 보류될 수 있어요.</p></div></details>
+<details><summary>Q4. 배송 중 파손되면요?</summary><div class="faq-answer"><p class="faq-short">포장·운송장·개봉 과정과 파손 증빙을 확인하고, 필요한 경우 택배사 절차를 함께 진행해요.</p><p class="faq-detail"><b>[상세/법적 기준]</b> 포장 상태, 운송장, 개봉 상태, 파손 사진·영상과 당사자의 과실 유무를 함께 확인해요. 택배사의 손해배상은 해당 택배사 약관과 관련 규정, 택배 표준약관이 적용되는 경우 그 기준에 따라 달라질 수 있으므로 운송장에 물품가액을 정확히 기재하는 것이 중요해요. Sparrow는 택배사에 대한 손해를 직접 보상하는 주체가 아니라 증빙 제출과 절차 안내를 지원하는 역할을 목표로 해요.</p></div></details>
+<details><summary>Q5. 보증금은 언제 돌려받나요?</summary><div class="faq-answer"><p class="faq-short">반납과 상태 확인이 끝나면 약관에 따라 정산하고, 문제가 있으면 확인이 끝날 때까지 정산이 보류될 수 있어요.</p><p class="faq-detail"><b>[상세/법적 기준]</b> 반납 물건의 수령과 상태 확인이 완료되면 약관에 정한 절차에 따라 보증금의 반환 또는 정산이 진행돼요. 이의제기나 분쟁이 접수되면 사실관계와 책임 범위를 확인할 때까지 정산을 보류할 수 있어요. 보증금은 손해배상 책임을 자동으로 확정하거나 모든 손해를 보장하는 제도가 아니며, 실제 적용 방식은 예치·에스크로 구조와 정식 약관에 따라 결정돼요.</p></div></details>
+<p class="legal">여기 적힌 내용은 이해를 돕기 위한 예시예요. 책임 범위, 원상회복의무, 감가상각, 보증금·예치·에스크로, 정산 및 이의제기 기한의 구체적인 기준은 출시 전 정식 약관에서 확정됩니다. 약관과 다르면 약관이 우선해요.</p></section>
+
+<section id="rewards"><h2>참여 감사 포인트</h2><p class="lead">보상이 목적이라면 참여하지 않으셔도 괜찮아요. 솔직한 답변이 가장 큰 도움이 됩니다.</p>
+<div class="rw"><span>설문 완료 + 연락처 작성 (선착순 <span class="n1">500</span>명)</span><b>30,000 C</b></div>
+<p class="legal">C Point는 1C=1원 기준의 서비스 포인트로, Sparrow 정식 출시 후 대여 이용에만 쓸 수 있으며 현금으로 환급되지 않습니다. 사용 기한과 보증금 사용 한도는 출시 전 공지하며 현재 미정입니다. 지급은 정식 출시 후 1인 1회, 선착순 한도 내에서 진행되며 조건은 변경될 수 있습니다.</p></section>
+
+<section style="text-align:center"><h2>필요한 물건과 빌려줄 물건,<br>알려주세요.</h2><br><button class="btn btn-p" id="final-cta" type="button"></button></section>
+<footer><p>© magPIE · 본 페이지는 정식 출시 전 수요·공급 검증을 위한 페이지입니다.</p><p style="margin-top:10px;text-align:left">본 안내는 이해를 돕기 위한 예시이며, 세부 책임과 정산 기준은 정식 약관을 따릅니다. 이의제기 기한 등 일부 기준은 현재 설계 중이며 출시 전 정식 약관을 통해 확정됩니다. Sparrow는 이용자 간 대여·정산 절차를 운영하며, 손해를 직접 보상하는 주체가 아닙니다.</p></footer>
+<div class="sticky" id="sticky"><button class="btn btn-p" id="sticky-cta" type="button"></button></div>
+</div>
+<script>
+const CONFIG={SUBMIT_URL:'https://script.google.com/macros/s/AKfycbxchaH2RncxuDutoCY3z-tpPMOGo3QvAzIrzaQGYCdAYN8PVCW7IyYnDiX5GMZkyP8/exec',N1:500,N2:150,ACTUAL_PRICE:'[실제 정가]',EXPERIMENT_ID:'exp_v2_hero3_safety2'};
+const LIVE=CONFIG.SUBMIT_URL&&CONFIG.SUBMIT_URL!=='[SUBMIT_URL]';
+const $=s=>document.querySelector(s);
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+function pick(k,o){let v=store.get(k);if(!o.includes(v)){v=o[Math.floor(Math.random()*o.length)];store.set(k,v)}return v}
+const hero=pick('sp_hero',['A','B','C']),safety=pick('sp_safety',['S0','S1']);
+const sid=store.get('sp_sid')||(()=>{const v=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():Date.now()+'-'+Math.random().toString(36).slice(2);store.set('sp_sid',v);return v})();
+function ev(name,p={}){const d={event_name:name,timestamp:new Date().toISOString(),session_id:sid,experiment_id:CONFIG.EXPERIMENT_ID,hero_variant:hero,safety_variant:safety,user_type:userType(),...p};console.log('[event]',d);if(LIVE){try{navigator.sendBeacon(CONFIG.SUBMIT_URL,new Blob([JSON.stringify(d)],{type:'text/plain'}))}catch(e){}}}
+const H={A:{h:'1년에 몇 번 쓰려고,\n비싼 장비를 사야 할까요?',s:'사기 전에 먼저 빌려 써보세요. 안 쓰는 내 물건을 빌려주면, 그만큼 필요한 다른 물건을 빌릴 수 있는 서비스를 준비 중입니다.',c:'3분 설문 시작하기',m:'약 3분 · 가입 없음 · 연락처는 선택'},
+B:{h:'안 쓰는 물건을 빌려주면,\n필요한 물건을 빌릴 수 있어요',s:'안 쓰는 물건을 빌려주고, 필요한 물건을 빌리는 서비스를 준비 중이에요. 정말 필요한지 먼저 묻고 싶어요.',c:'3분 설문 시작하기',m:'약 3분 · 가입 없음 · 연락처는 선택'},
+C:{h:'비싼 장비, 사지 않고\n써볼 수 있다면?',s:'안 쓰는 내 물건을 빌려주고 쌓은 포인트로 필요한 장비를 빌리는 방식을 준비 중입니다. 설문에 참여하면 출시 후 쓸 수 있는 포인트를 드려요.',c:'3분 설문 시작하기',m:'약 3분 · 포인트 지급 조건은 페이지 하단 안내 참고'}};
+const CATS=['캠핑·여행용품','공구·DIY 용품','운동·레저용품','카메라·촬영장비','생활·가전제품','청소·관리용품','육아·아동용품','파티·행사용품','의류·잡화','취미·악기용품','차량·차량용품','기타'];
+const S=[
+{id:'S1',t:'single',q:'최근 1년 안에, 잠깐 쓸 물건을 사거나 빌릴까 알아본 적이 있나요?',d:'예: 캠핑 장비, 카메라, 공구처럼 가끔만 쓰는 물건',o:['아니요, 그런 적 없어요','생각만 해봤어요','인터넷에서 검색해 봤어요','가격이나 대여할 곳을 비교해 봤어요','문의·장바구니·예약까지 해봤어요'],sv:[0,1,2,3,4]},
+{id:'D1',t:'multi',other:'기타',q:'최근 사고 싶거나 빌리고 싶었던 물건은 무엇인가요?',d:'해당하는 것을 모두 골라주세요.',o:CATS,when:()=>dem()},
+{id:'D2',t:'single',q:'그 물건을 아직 사거나 빌리지 않은 가장 큰 이유는 무엇인가요?',o:['가격이 부담돼서','자주 쓰지 않을 것 같아서','보관할 공간이 부족해서','필요한 기간이 짧아서','굳이 소유할 필요가 없어서','빌릴 곳을 찾기 어려워서','아직 결정하지 못해서','기타'],when:()=>dem()},
+{id:'D3',t:'single',q:'그 물건은 언제쯤 필요하세요?',o:['지금 또는 1개월 이내','1~3개월 이내','3~6개월 이내','6개월 이후','특별히 정해진 시기는 없음'],when:()=>dem()},
+{id:'R1',t:'single',q:'1년 가까이 거의 안 쓴 물건이 집에 있나요?',o:['네, 있어요','있는 것 같은데 잘 모르겠어요','아니요, 없어요']},
+{id:'R1B',t:'single',q:'그 물건을 모르는 사람에게 빌려줄 수 있나요?',o:['조건 없이 빌려줄 수 있어요','조건이 맞으면 빌려줄 수 있어요','아는 사람에게만 빌려줄 수 있어요','빌려주기 어려워요'],when:()=>idx('R1')===0},
+{id:'R2',t:'single',q:'실제로 빌려줄 수 있는 물건 하나를 골라주세요.',o:CATS,when:()=>sup()},
+{id:'R3',t:'single',q:'그 물건은 평소 얼마나 자주 사용하나요?',o:['최근 1년간 한 번도 안 썼어요','1년에 1~2번 정도','한 달에 1번 정도','한 달에 2번 이상'],when:()=>sup()},
+{id:'R4',t:'single',q:'그 물건을 빌려준다면 최대 어느 정도 기간까지 괜찮나요?',o:['하루','주말 1~2일','3~7일','1주일 이상','기간과 상관없이 빌려주기 어려워요'],when:()=>sup()},
+{id:'T1',t:'single',q:'다른 사람에게 물건을 빌리거나 빌려줄 때 가장 걱정되는 것은 무엇인가요?',d:'가장 신경 쓰이는 것 하나만 골라주세요.',o:['물건이 망가지거나 없어지는 것','약속한 날짜에 돌려받지 못하는 것','돌려받았을 때 상태가 달라지는 것','개인정보나 집 주소 등이 노출되는 것','모르는 사람을 믿기 어려운 것','택배 과정에서 문제가 생기는 것','보증금이나 정산 문제','특별히 걱정되는 것은 없음']},
+{id:'AGE',t:'single',q:'연령대를 알려주세요. (참고용)',o:['만 32세 이하','만 33~38세','만 39세 이상','답하지 않음']},
+{id:'C',t:'contact',q:'Sparrow 출시 소식이나 후속 설문에 참여해 보시겠어요?',d:'연락처는 선택이며, 입력하지 않아도 제출할 수 있어요.'}];
+const stepDef=id=>S.find(s=>s.id===id);
+const idx=id=>{const a=ans[id];return typeof a==='string'?stepDef(id).o.indexOf(a):-1};
+const str=id=>{const i=idx(id),v=stepDef(id).sv;return i>=0&&v?v[i]:-1};
+const d1=()=>ans.D1&&Array.isArray(ans.D1.sel)?ans.D1.sel:[];
+const dem=()=>str('S1')>=1;
+const qdem=()=>str('S1')>=2&&d1().length>0;
+const sup=()=>idx('R1')===0&&(idx('R1B')===0||idx('R1B')===1);
+const userType=()=>{try{const d=qdem(),u=sup()&&!!ans.R2;return d&&u?'both':d?'demand':u?'supply':'unknown'}catch(e){return 'unknown'}};
+const steps=()=>S.filter(s=>!s.when||s.when());
+let ans={},cur=0,draftStep=null,started=false,submitted=false,lock=false;const fired={};
+const DONE=store.get('sp_done')&&!/retake/.test(location.search);
+try{const dr=JSON.parse(store.get('sp_draft2')||'null');if(dr&&dr.a){ans=dr.a;draftStep=dr.s}}catch(e){}
+const hasDraft=()=>Object.keys(ans).length>0;
+function save(){const a={...ans};delete a.C;store.set('sp_draft2',JSON.stringify({a,s:(steps()[cur]||{}).id}))}
+const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+
+const PHONE=/^01[0-9][- ]?[0-9]{3,4}[- ]?[0-9]{4}$/;
+
+/* hero / static copy */
+const ctaText=()=>hasDraft()?'이어서 설문하기':H[hero].c;
+function paintCta(){['hero-cta','sticky-cta','final-cta'].forEach(i=>$('#'+i).textContent=ctaText())}
+$('#h1').textContent=H[hero].h;$('#hsub').textContent=H[hero].s;$('#micro').textContent=H[hero].m;paintCta();
+$('#ap').textContent=CONFIG.ACTUAL_PRICE;document.querySelectorAll('.n1').forEach(e=>e.textContent=CONFIG.N1);document.querySelectorAll('.n2').forEach(e=>e.textContent=CONFIG.N2);
+if(safety==='S1')$('#survey').before($('#safety'));
+CATS.forEach(c=>{const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=c;b.onclick=()=>{ev('category_chip_click',{category:c});const v=ans.D1&&Array.isArray(ans.D1.sel)?ans.D1:{sel:[],other:''};ans.D1={...v,sel:v.sel.includes(c)?v.sel:[...v.sel,c]};save();start()};$('#chips').appendChild(b)});
+$('#hero-cta').onclick=()=>{ev('hero_cta_click',{cta:'hero'});start()};$('#sticky-cta').onclick=()=>{ev('hero_cta_click',{cta:'sticky'});start()};$('#final-cta').onclick=()=>{ev('hero_cta_click',{cta:'final'});start()};
+$('#supply-cta').onclick=()=>{ev('hero_cta_click',{cta:'supply'});start('R1')};
+let hv=true,sv=false;const upd=()=>$('#sticky').classList.toggle('show',!hv&&!sv);
+if('IntersectionObserver' in window){new IntersectionObserver(e=>{hv=e[0].isIntersecting;upd()}).observe($('#hero'));new IntersectionObserver(e=>{sv=e[0].isIntersecting;upd()}).observe($('#survey'));
+const seen=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){ev('section_view',{section:e.target.id});seen.unobserve(e.target)}}),{threshold:.4});seen.observe($('#safety'))}
+ev('landing_view');
+document.querySelectorAll('#safety details,#faq details').forEach(d=>d.addEventListener('toggle',()=>{if(d.open)ev('faq_open',{section:d.closest('section').id,question:d.querySelector('summary').textContent.trim()})}));
+
+/* survey */
+function start(id){if(!started){started=true;ev('survey_start',{entry:id||'default'})}
+const st=steps();if(id){cur=Math.max(0,st.findIndex(s=>s.id===id))}else if(draftStep){const i=st.findIndex(s=>s.id===draftStep);if(i>=0)cur=i;draftStep=null}
+try{history.replaceState({sp:cur},'')}catch(e){}render();$('#survey').scrollIntoView({behavior:'smooth',block:'start'})}
+function go(n){cur=n;try{history.pushState({sp:n},'')}catch(e){}save();render()}
+window.addEventListener('popstate',e=>{if(e.state&&typeof e.state.sp==='number'){cur=e.state.sp;render()}});
+function render(){const W=$('#wiz');
+if(DONE&&!submitted){W.innerHTML='<h3 class="sq">이미 참여해 주셨어요.</h3><p class="sd">소중한 답변 감사합니다. (다시 테스트하려면 주소 끝에 ?retake=1)</p>';$('#bar').style.width='100%';return}
+const st=steps();if(cur>=st.length)cur=st.length-1;const q=st[cur],v=ans[q.id];
+$('#bar').style.width=((cur+1)/st.length*100)+'%';
+let h=`<div class="sh"><span>${q.t==='contact'?'마지막 질문':'질문'}</span><span>${cur+1} / ${st.length}</span></div><h3 class="sq">${esc(q.q)}</h3>${q.d?`<p class="sd">${esc(q.d)}</p>`:''}`;
+if(q.t==='single'||q.t==='multi'){const sel=q.t==='multi'?((v&&v.sel)||[]):[v];h+='<div class="og">'+q.o.map((o,i)=>`<button type="button" class="opt" data-i="${i}" aria-pressed="${sel.includes(o)}"><span>${esc(o)}</span></button>`).join('')+'</div>';
+if(q.t==='multi'&&q.other&&sel.includes(q.other))h+=`<label for="ot">직접 입력 (선택)</label><input type="text" id="ot" maxlength="40" placeholder="예: 물건 이름" value="${esc(v&&v.other)}">`}
+if(q.t==='contact'){const c=ans.C||{};h+=`<div class="og"><button type="button" class="opt" data-m="0" aria-pressed="${c.mode===0}"><span>네, 남길게요 (30,000 C 포인트 받기)</span></button><button type="button" class="opt" data-m="1" aria-pressed="${c.mode===1}"><span>연락처 없이 제출할게요 (포인트 제외)</span></button></div>`;
+if(c.mode===0){h+=`<label for="ph">휴대폰 번호</label><input type="tel" id="ph" inputmode="tel" autocomplete="tel" placeholder="010-0000-0000" value="${esc(c.phone)}"><label class="chk"><input type="checkbox" id="ag" ${c.agree?'checked':''}><span>[필수] 개인정보 수집·이용 동의 — 목적: 출시 소식·후속 설문 안내 및 C Point 지급 / 항목: 휴대폰 번호 / 보유기간: 정식 출시 후 3개월. 동의를 거부해도 연락처 없이 제출할 수 있습니다.</span></label>`;
+}}
+h+='<p class="err" id="err" role="alert"></p><div class="nav">'+(cur?'<button type="button" class="btn btn-s" id="prev" style="flex:1">이전</button>':'')+(q.t==='single'?'':`<button type="button" class="btn btn-p" id="next" style="flex:2">${q.t==='contact'?'제출하기':'다음'}</button>`)+'</div>';
+const same=W.dataset.qid===q.id,pv=new Set(same?[...W.querySelectorAll('.opt[aria-pressed="true"]')].map(b=>b.dataset.i+'|'+b.dataset.m):[]);W.dataset.qid=q.id;W.innerHTML=h;W.querySelectorAll('.opt[aria-pressed="true"]').forEach(b=>{if(pv.has(b.dataset.i+'|'+b.dataset.m))b.classList.add('still')})}
+function showErr(m){const e=$('#err');if(e)e.textContent=m}
+function check(q){const a=ans[q.id];
+if(q.t==='single')return a?'':'하나를 선택해 주세요.';
+if(q.t==='multi')return a&&a.sel&&a.sel.length?'':'하나 이상 선택해 주세요.';
+return ''}
+const picked=q=>{const a=ans[q.id];return q.o.filter(x=>a&&a.sel&&a.sel.includes(x))};
+const hasOther=q=>{const a=ans[q.id];return !!(q.other&&a&&a.sel&&a.sel.includes(q.other)&&(a.other||'').trim())};
+function logAns(q){let val=ans[q.id];const x={};if(q.t==='multi')val={selected_categories:picked(q),has_other_text:hasOther(q)};if(q.sv)x.strength=str(q.id);ev('survey_question_answer',{survey_question:q.id,answer:val,...x})}
+function build(withText){const o={};steps().forEach(q=>{if(q.id==='C')return;const a=ans[q.id];if(a===undefined)return;if(q.t==='multi'){const m={selected_categories:picked(q),has_other_text:hasOther(q)};if(withText&&m.has_other_text)m.other_text=a.other.trim();o[q.id]=m}else o[q.id]=a});return o}
+function adv(){const st=steps(),q=st[cur];if(q.t==='contact')return submit();const m=check(q);if(m)return showErr(m);logAns(q);
+if(q.id==='D1'&&!fired.d&&qdem()){fired.d=1;ev('demand_identified',{selected_categories:picked(q),strength:str('S1')})}
+if(q.id==='R2'&&!fired.s){fired.s=1;ev('supply_identified',{category:ans.R2})}
+go(cur+1)}
+const W=$('#wiz');
+W.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const q=steps()[cur];
+if(b.dataset.i!==undefined){const o=q.o[+b.dataset.i];if(q.t==='single'){ans[q.id]=o;save();render();if(!lock){lock=true;setTimeout(()=>{lock=false;adv()},220)}}else{const v=ans[q.id]||{sel:[],other:''};ans[q.id]={...v,sel:v.sel.includes(o)?v.sel.filter(x=>x!==o):[...v.sel,o]};save();render()}}
+else if(b.dataset.m!==undefined){ans.C={...(ans.C||{}),mode:+b.dataset.m};if(+b.dataset.m===0)ev('prereg_click',{action:'contact_opt_in'});render()}
+else if(b.id==='prev')go(cur-1);else if(b.id==='next')adv()});
+function onIn(e){const t=e.target,q=steps()[cur];if(t.id==='ot'){ans[q.id]={...(ans[q.id]||{sel:[]}),other:t.value};save()}else if(t.id==='ph')ans.C={...ans.C,phone:t.value};else if(t.id==='ag')ans.C={...ans.C,agree:t.checked};}
+W.addEventListener('input',onIn);W.addEventListener('change',onIn);
+function submit(){if(submitted)return;const c=ans.C||{};
+if(c.mode===undefined)return showErr('하나를 선택해 주세요.');
+if(c.mode===0){if(!PHONE.test((c.phone||'').trim()))return showErr('올바른 휴대폰 번호를 입력해 주세요. (예: 010-1234-5678)');if(!c.agree)return showErr('개인정보 수집·이용에 동의해 주세요.')}
+submitted=true;const btn=$('#next');if(btn)btn.disabled=true;
+const clean=build(false),full=build(true);const has=c.mode===0;
+if(has)ev('contact_submit',{has_contact:true});
+ev('survey_complete',{answers:clean,has_contact:has});
+const payload={event_name:'survey_submission',timestamp:new Date().toISOString(),session_id:sid,experiment_id:CONFIG.EXPERIMENT_ID,hero_variant:hero,safety_variant:safety,user_type:userType(),answers:full,contact:has?{phone:c.phone.trim(),consent:true}:null};
+if(LIVE){try{fetch(CONFIG.SUBMIT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)}).catch(console.error)}catch(e){}}else console.log('[submission - not sent]',{...payload,contact:payload.contact?{...payload.contact,phone:'(hidden)'}:null});
+store.set('sp_done','1');store.del('sp_draft2');paintCta();
+const reward=!has?'연락처 미입력 · 포인트 지급 대상이 아닙니다':'예정 보상 30,000 C';
+W.innerHTML=`<h3 class="sq">참여해 주셔서 감사합니다.</h3><p class="sd">답변은 Sparrow의 대여 목록과 정책 설계에 반영됩니다.</p><div class="note"><b>${esc(reward)}</b><br>지급은 정식 출시 후이며 조건은 하단 안내를 따릅니다.</div>${LIVE?'':'<p class="err">[개발 모드] SUBMIT_URL 미설정: 데이터가 서버로 전송되지 않았습니다.</p>'}`}
+/* 최초 렌더링 */
+(function initSurvey(){
+if(!DONE){if(draftStep){const i=steps().findIndex(s=>s.id===draftStep);if(i>=0)cur=i;draftStep=null}
+try{history.replaceState({sp:cur},'')}catch(e){}}
+render();
+})();
+</script>
+<script>
+/* 섹션 등장 */
+(function(){
+if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+const rv=[...document.querySelectorAll('.app section')].filter(x=>x.id!=='hero');
+rv.forEach(x=>x.classList.add('rv'));
+const ro=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');ro.unobserve(x.target)}}),{threshold:.06,rootMargin:'0px 0px -6% 0px'});
+rv.forEach(x=>ro.observe(x))}
+})();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" defer></script>
+<script>
+/* 헤더 로고 애니메이션 */
+(function(){
+var D_I='M652.6,138.5 C656.6,138.5 661.9,138.6 664.6,138.7 C667.3,138.9 667.0,139.1 668.8,139.5 C670.6,139.8 673.4,140.2 675.5,140.7 C677.6,141.1 679.5,141.7 681.5,142.3 C683.5,143.0 685.6,143.7 687.5,144.5 C689.4,145.3 691.2,146.2 693.1,147.1 C695.0,148.1 696.9,149.1 698.8,150.2 C700.6,151.4 702.4,152.5 704.2,153.8 C706.1,155.1 707.9,156.4 709.7,157.8 C711.4,159.3 713.0,160.8 714.6,162.3 C716.2,163.9 717.6,165.6 719.0,167.3 C720.4,169.0 721.8,170.8 722.9,172.7 C724.1,174.5 725.1,176.5 725.8,178.5 C726.4,180.5 726.9,182.6 726.9,184.7 C726.8,186.9 726.7,189.1 725.3,191.4 C723.8,193.7 724.3,196.1 718.0,198.5 C711.8,201.0 699.2,203.5 687.8,206.0 C676.3,208.6 658.4,211.2 649.4,213.9 C640.3,216.6 637.5,219.4 633.3,222.2 C629.1,225.0 626.9,227.9 624.3,230.9 C621.6,233.8 619.5,236.8 617.3,239.9 C615.2,243.0 613.4,246.1 611.6,249.3 C609.7,252.5 607.7,255.7 606.1,259.0 C604.5,262.3 603.2,265.7 601.9,269.1 C600.5,272.5 599.2,276.0 598.0,279.5 C596.7,283.0 595.4,286.6 594.3,290.2 C593.3,293.8 592.6,297.4 591.6,301.1 C590.6,304.9 589.4,308.6 588.5,312.4 C587.6,316.2 586.8,320.0 586.1,323.9 C585.3,327.8 584.7,331.7 583.9,335.7 C583.2,339.7 582.4,343.7 581.6,347.7 C580.9,351.8 580.1,355.8 579.4,359.9 C578.6,364.1 577.9,368.2 577.3,372.4 C576.6,376.6 576.1,380.8 575.5,385.0 C574.9,389.2 574.2,393.5 573.6,397.8 C573.0,402.1 572.6,406.4 572.0,410.8 C571.4,415.1 570.6,419.5 570.0,423.9 C569.4,428.3 568.9,432.7 568.4,437.1 C567.9,441.5 567.5,446.0 567.0,450.4 C566.5,454.9 565.9,459.4 565.4,463.9 C564.8,468.4 564.2,472.9 563.7,477.4 C563.1,481.9 562.5,486.4 562.0,490.9 C561.5,495.5 561.0,500.0 560.4,504.5 C559.9,509.1 559.3,513.6 558.7,518.2 C558.2,522.7 557.6,527.3 557.0,531.8 C556.5,536.4 556.0,540.9 555.4,545.5 C554.9,550.0 554.3,554.5 553.7,559.1 C553.1,563.6 552.5,568.1 551.9,572.6 C551.2,577.1 550.6,581.6 549.9,586.1 C549.3,590.6 548.7,595.1 547.9,599.6 C547.2,604.0 546.4,608.5 545.7,612.9 C544.9,617.3 544.3,621.7 543.5,626.1 C542.7,630.5 541.8,634.9 541.0,639.2 C540.2,643.6 539.4,647.9 538.6,652.2 C537.8,656.5 536.9,660.8 536.0,665.0 C535.1,669.2 534.3,673.4 533.3,677.6 C532.4,681.8 531.2,685.9 530.2,690.1 C529.3,694.2 528.6,698.2 527.6,702.3 C526.6,706.3 525.3,710.3 524.2,714.3 C523.1,718.3 522.0,722.2 521.0,726.1 C519.9,730.0 519.0,733.8 517.9,737.6 C516.7,741.4 515.3,745.1 514.1,748.9 C512.8,752.6 511.5,756.2 510.2,759.8 C508.8,763.4 507.4,767.0 506.0,770.5 C504.6,774.0 503.2,777.5 501.7,780.9 C500.3,784.3 498.7,787.7 497.1,791.0 C495.5,794.3 493.8,797.5 492.1,800.7 C490.5,803.9 489.0,807.0 487.3,810.1 C485.6,813.2 483.7,816.2 481.9,819.1 C480.1,822.1 478.4,825.0 476.5,827.8 C474.6,830.6 472.7,833.4 470.7,836.1 C468.8,838.8 466.8,841.4 464.8,844.0 C462.8,846.5 460.9,849.0 458.8,851.5 C456.7,853.9 454.4,856.3 452.2,858.6 C449.9,860.9 447.7,863.1 445.5,865.3 C443.2,867.4 441.0,869.5 438.8,871.5 C436.5,873.5 434.2,875.5 431.9,877.3 C429.5,879.2 427.1,881.0 424.8,882.7 C422.4,884.4 420.1,886.1 417.7,887.7 C415.3,889.2 412.8,890.7 410.4,892.2 C408.0,893.6 405.6,894.9 403.2,896.2 C400.9,897.5 398.6,898.6 396.2,899.8 C393.8,900.9 391.1,901.9 388.8,902.9 C386.4,903.8 384.5,904.7 382.2,905.5 C379.9,906.3 377.4,907.0 375.0,907.7 C372.6,908.3 370.5,908.9 368.1,909.3 C365.6,909.8 362.8,910.2 360.4,910.5 C358.0,910.9 356.1,911.1 353.5,911.3 C351.0,911.4 347.8,911.5 345.0,911.5 C342.2,911.5 339.1,911.4 336.5,911.3 C334.0,911.1 332.2,910.9 329.9,910.5 C327.5,910.2 324.8,909.8 322.6,909.3 C320.3,908.9 318.5,908.3 316.5,907.7 C314.5,907.0 312.5,906.3 310.5,905.5 C308.5,904.7 306.5,903.8 304.5,902.9 C302.6,901.9 300.6,900.9 298.7,899.8 C296.9,898.6 295.3,897.5 293.6,896.2 C291.9,894.9 290.2,893.6 288.6,892.2 C287.0,890.7 285.3,889.2 283.8,887.7 C282.2,886.1 280.7,884.4 279.5,882.7 C278.2,881.0 277.1,879.2 276.2,877.3 C275.3,875.5 274.5,873.5 274.0,871.5 C273.6,869.5 272.9,867.4 273.3,865.3 C273.7,863.1 274.4,860.9 276.3,858.6 C278.2,856.3 279.9,853.9 284.9,851.5 C290.0,849.0 297.7,846.5 306.5,844.0 C315.3,841.4 329.2,838.8 337.7,836.1 C346.2,833.4 352.0,830.6 357.5,827.8 C363.0,825.0 366.9,822.1 370.7,819.1 C374.4,816.2 377.2,813.2 379.9,810.1 C382.7,807.0 385.0,803.9 387.3,800.7 C389.6,797.5 391.7,794.3 393.7,791.0 C395.8,787.7 397.7,784.3 399.4,780.9 C401.1,777.5 402.5,774.0 404.0,770.5 C405.4,767.0 406.8,763.4 408.1,759.8 C409.4,756.2 410.7,752.6 411.9,748.9 C413.1,745.1 414.1,741.4 415.2,737.6 C416.2,733.8 417.2,730.0 418.1,726.1 C419.0,722.2 419.7,718.3 420.6,714.3 C421.4,710.3 422.4,706.3 423.3,702.3 C424.1,698.2 425.0,694.2 425.7,690.1 C426.5,685.9 427.3,681.8 428.0,677.6 C428.7,673.4 429.4,669.2 430.0,665.0 C430.6,660.8 431.2,656.5 431.7,652.2 C432.3,647.9 432.8,643.6 433.4,639.2 C433.9,634.9 434.5,630.5 435.0,626.1 C435.5,621.7 436.1,617.3 436.6,612.9 C437.1,608.5 437.7,604.0 438.2,599.6 C438.8,595.1 439.5,590.6 440.0,586.1 C440.5,581.6 441.0,577.1 441.5,572.6 C441.9,568.1 442.4,563.6 442.9,559.1 C443.3,554.5 443.7,550.0 444.2,545.5 C444.8,540.9 445.5,536.4 446.0,531.8 C446.5,527.3 447.0,522.7 447.5,518.2 C448.0,513.6 448.5,509.1 448.9,504.5 C449.4,500.0 449.9,495.5 450.4,490.9 C450.9,486.4 451.4,481.9 452.0,477.4 C452.6,472.9 453.3,468.4 454.0,463.9 C454.6,459.4 455.1,454.9 455.7,450.4 C456.3,446.0 456.9,441.5 457.5,437.1 C458.1,432.7 458.8,428.3 459.4,423.9 C460.0,419.5 460.5,415.1 461.2,410.8 C461.8,406.4 462.5,402.1 463.3,397.8 C464.0,393.5 464.7,389.2 465.5,385.0 C466.3,380.8 467.0,376.6 467.8,372.4 C468.6,368.2 469.2,364.1 470.1,359.9 C470.9,355.8 471.8,351.8 472.7,347.7 C473.7,343.7 474.9,339.7 475.8,335.7 C476.8,331.7 477.5,327.8 478.5,323.9 C479.5,320.0 480.8,316.2 482.0,312.4 C483.1,308.6 484.2,304.9 485.3,301.1 C486.5,297.4 487.7,293.8 488.9,290.2 C490.1,286.6 491.3,283.0 492.6,279.5 C493.9,276.0 495.3,272.5 496.7,269.1 C498.1,265.7 499.5,262.3 501.0,259.0 C502.4,255.7 503.9,252.5 505.4,249.3 C506.9,246.1 508.4,243.0 510.0,239.9 C511.6,236.8 513.2,233.8 514.9,230.9 C516.6,227.9 518.4,225.0 520.1,222.2 C521.9,219.4 523.5,216.6 525.3,213.9 C527.1,211.2 529.1,208.6 531.0,206.0 C532.9,203.5 534.8,201.0 536.7,198.5 C538.7,196.1 540.8,193.7 542.8,191.4 C544.9,189.1 546.9,186.9 549.0,184.7 C551.1,182.6 553.1,180.5 555.3,178.5 C557.4,176.5 559.9,174.5 562.1,172.7 C564.4,170.8 566.7,169.0 569.0,167.3 C571.3,165.6 573.6,163.9 576.0,162.3 C578.4,160.8 580.8,159.3 583.3,157.8 C585.8,156.4 588.6,155.1 591.1,153.8 C593.6,152.5 595.7,151.4 598.2,150.2 C600.7,149.1 603.5,148.1 606.1,147.1 C608.6,146.2 610.7,145.3 613.3,144.5 C615.8,143.7 618.8,143.0 621.3,142.3 C623.8,141.7 625.9,141.1 628.4,140.7 C631.0,140.2 634.5,139.8 636.5,139.5 C638.5,139.1 637.9,138.9 640.6,138.7 C643.3,138.6 648.6,138.5 652.6,138.5Z',D_S='M683.5,373.3 C680.8,375.2 678.0,377.1 675.1,378.7 C672.3,380.4 669.3,382.0 666.3,383.4 C663.3,384.9 660.2,386.2 657.1,387.4 C654.0,388.5 650.8,389.6 647.5,390.5 C644.3,391.4 641.0,392.2 637.7,392.8 C634.3,393.4 631.0,393.9 627.6,394.2 C624.2,394.5 620.7,394.7 617.3,394.7 C613.8,394.7 610.3,394.6 606.8,394.3 C603.3,394.0 599.8,393.5 596.3,392.9 C592.8,392.3 589.3,391.5 585.8,390.5 C582.4,389.5 578.9,388.4 575.4,387.0 C572.0,385.7 568.5,384.2 565.1,382.5 C561.8,380.8 558.4,378.9 555.1,376.8 C551.8,374.7 548.6,372.5 545.4,370.0 C542.3,367.5 539.2,364.8 536.2,361.8 C533.2,358.9 529.9,355.2 527.6,352.4 C525.2,349.6 523.3,346.7 522.1,345.1 C520.9,343.6 521.0,343.7 520.4,343.1 C519.8,342.4 519.1,341.8 518.4,341.2 C517.8,340.6 517.0,340.0 516.3,339.5 C515.6,339.0 514.9,338.5 514.0,338.1 C513.1,337.6 511.9,337.0 511.0,336.7 C510.1,336.3 509.5,336.1 508.5,335.9 C507.6,335.6 506.5,335.4 505.4,335.2 C504.2,335.1 502.9,335.0 501.6,335.0 C500.4,335.0 499.2,335.1 498.0,335.3 C496.8,335.5 495.7,335.8 494.6,336.1 C493.5,336.4 492.6,336.8 491.5,337.3 C490.5,337.8 489.2,338.5 488.2,339.1 C487.2,339.8 486.3,340.5 485.4,341.3 C484.5,342.1 483.4,343.2 482.6,344.2 C481.8,345.2 481.2,346.1 480.5,347.2 C479.9,348.3 479.2,349.6 478.7,350.9 C478.2,352.2 477.8,353.7 477.5,355.1 C477.2,356.5 477.1,357.9 477.0,359.1 C477.0,360.4 477.0,361.4 477.1,362.8 C477.3,364.2 477.7,365.9 478.1,367.3 C478.5,368.7 479.0,369.9 479.6,371.1 C480.2,372.4 481.1,373.7 481.9,374.8 C482.7,375.9 483.4,376.8 484.4,377.7 C485.4,378.7 486.8,379.9 488.0,380.7 C489.1,381.5 490.1,382.1 491.5,382.7 C492.8,383.3 494.6,383.9 496.0,384.3 C497.5,384.7 494.3,384.5 500.2,384.9 C506.1,385.3 519.1,384.9 531.5,386.7 C543.9,388.5 560.7,391.4 574.8,395.6 C588.9,399.8 602.7,405.2 615.9,411.8 C629.1,418.4 642.2,426.5 654.0,435.3 C665.9,444.0 676.9,453.9 686.9,464.4 C697.0,475.0 706.3,486.7 714.3,498.7 C722.3,510.7 729.2,523.2 735.0,536.4 C740.8,549.5 745.7,563.6 749.2,577.5 C752.7,591.3 755.0,605.4 756.2,619.5 C757.3,633.5 757.3,647.8 756.1,661.8 C754.9,675.7 752.4,689.8 749.0,703.2 C745.6,716.6 741.1,729.6 735.7,742.0 C730.3,754.5 723.7,766.7 716.5,777.9 C709.3,789.2 701.2,799.7 692.5,809.5 C683.8,819.3 674.1,828.5 664.2,836.7 C654.3,844.9 643.9,852.3 633.1,858.7 C622.2,865.2 610.8,870.9 599.4,875.7 C588.0,880.4 576.4,884.2 564.7,887.2 C553.0,890.2 540.9,892.3 529.2,893.5 C517.5,894.8 505.7,895.2 494.4,894.9 C483.0,894.6 471.8,893.4 460.9,891.7 C449.9,889.9 439.0,887.3 428.7,884.2 C418.4,881.2 408.4,877.4 398.9,873.2 C389.4,869.1 380.4,864.4 371.8,859.2 C363.2,854.1 354.7,848.3 347.1,842.5 C339.4,836.7 332.5,830.8 325.9,824.5 C319.3,818.1 313.0,811.4 307.3,804.7 C301.6,798.0 295.8,790.0 291.7,784.2 C287.6,778.4 285.0,774.0 282.5,769.6 C280.1,765.3 278.6,761.9 277.0,758.1 C275.4,754.2 274.0,750.3 272.9,746.5 C271.8,742.6 270.9,738.7 270.2,734.9 C269.4,731.1 269.0,727.3 268.6,723.5 C268.3,719.7 268.2,716.0 268.3,712.3 C268.3,708.6 268.6,704.9 269.0,701.3 C269.4,697.7 270.0,694.2 270.7,690.7 C271.4,687.2 272.3,683.8 273.3,680.4 C274.4,677.1 275.5,673.8 276.9,670.6 C278.2,667.4 279.6,664.3 281.2,661.2 C282.8,658.2 284.5,655.3 286.3,652.4 C288.1,649.5 290.0,646.8 292.1,644.1 C294.1,641.4 296.3,638.9 298.6,636.4 C300.8,633.9 303.2,631.6 305.7,629.3 C308.1,627.1 310.7,624.9 313.3,622.9 C315.9,620.9 318.7,619.0 321.5,617.2 C324.3,615.4 327.1,613.8 330.1,612.2 C333.0,610.7 336.1,609.3 339.1,608.0 C342.2,606.7 345.3,605.6 348.5,604.6 C351.7,603.6 355.0,602.7 358.2,601.9 C361.5,601.2 364.9,600.6 368.2,600.2 C371.6,599.7 375.0,599.4 378.4,599.3 C381.8,599.1 385.2,599.2 388.7,599.3 C392.1,599.5 395.6,599.8 399.1,600.3 C402.6,600.8 406.0,601.4 409.5,602.2 C413.0,603.0 416.4,604.0 419.9,605.2 C423.3,606.3 426.7,607.6 430.1,609.1 C433.5,610.7 436.8,612.3 440.1,614.2 C443.4,616.1 446.7,618.1 449.8,620.4 C453.0,622.7 456.1,625.1 459.1,627.8 C462.2,630.4 465.1,633.3 467.9,636.4 C470.8,639.4 473.8,643.3 476.1,646.3 C478.3,649.3 480.3,652.6 481.5,654.3 C482.7,656.0 482.5,655.7 483.1,656.3 C483.6,657.0 484.1,657.5 484.8,658.2 C485.5,658.8 486.5,659.7 487.3,660.2 C488.1,660.8 488.6,661.1 489.4,661.6 C490.3,662.1 491.3,662.6 492.3,663.0 C493.2,663.4 494.2,663.8 495.2,664.1 C496.1,664.3 497.0,664.5 498.1,664.7 C499.2,664.9 500.5,665.0 501.7,665.0 C502.8,665.0 504.0,664.9 505.1,664.8 C506.2,664.7 507.2,664.5 508.3,664.2 C509.4,663.9 510.8,663.4 511.9,663.0 C513.0,662.5 514.0,662.0 515.1,661.3 C516.1,660.7 517.3,659.8 518.3,659.0 C519.3,658.1 520.1,657.3 521.0,656.3 C521.8,655.3 522.7,654.1 523.4,652.9 C524.1,651.8 524.6,650.7 525.1,649.5 C525.6,648.3 526.1,646.8 526.4,645.5 C526.7,644.2 526.9,643.1 526.9,641.7 C527.0,640.4 527.0,639.0 526.9,637.7 C526.8,636.3 526.5,634.7 526.1,633.4 C525.8,632.1 525.4,631.0 524.8,629.7 C524.2,628.4 523.3,626.8 522.4,625.6 C521.6,624.3 520.7,623.3 519.7,622.3 C518.7,621.3 517.4,620.3 516.3,619.5 C515.2,618.7 514.3,618.2 513.0,617.6 C511.8,617.0 510.2,616.3 508.8,615.9 C507.3,615.5 507.9,615.3 504.2,615.1 C500.5,614.9 497.0,615.7 486.7,614.5 C476.4,613.4 456.9,611.4 442.6,608.0 C428.3,604.6 414.4,599.9 400.9,594.1 C387.4,588.3 374.0,581.0 361.7,573.0 C349.5,564.9 338.1,555.9 327.4,545.9 C316.8,535.8 306.6,524.5 297.9,512.9 C289.2,501.2 281.5,488.8 274.9,476.0 C268.4,463.2 262.8,449.6 258.6,436.0 C254.3,422.4 251.3,408.7 249.4,394.7 C247.5,380.7 246.7,366.0 247.1,352.0 C247.5,337.9 249.2,323.9 251.9,310.5 C254.5,297.0 258.3,283.8 263.0,271.2 C267.7,258.5 273.4,246.1 280.0,234.5 C286.6,222.8 294.3,211.5 302.5,201.2 C310.6,190.9 319.5,181.4 329.0,172.6 C338.5,163.9 348.8,155.8 359.3,148.7 C369.8,141.6 380.7,135.4 391.8,130.0 C403.0,124.7 414.7,120.1 426.3,116.5 C437.8,112.9 449.6,110.2 461.2,108.3 C472.8,106.4 484.4,105.4 495.7,105.1 C507.0,104.8 518.1,105.3 529.1,106.4 C540.1,107.6 550.9,109.5 561.5,112.0 C572.0,114.5 582.6,117.9 592.3,121.5 C602.1,125.2 611.1,129.3 620.0,133.9 C628.8,138.5 637.4,143.8 645.4,149.2 C653.4,154.6 660.9,160.4 667.9,166.4 C675.0,172.4 681.5,178.7 687.5,185.0 C693.5,191.4 699.6,198.8 704.1,204.5 C708.6,210.2 711.7,214.8 714.4,219.1 C717.1,223.4 718.7,226.6 720.5,230.3 C722.3,234.1 723.9,237.9 725.2,241.7 C726.6,245.5 727.7,249.3 728.6,253.1 C729.5,256.9 730.2,260.7 730.7,264.4 C731.2,268.2 731.5,271.9 731.6,275.6 C731.7,279.3 731.7,283.0 731.5,286.6 C731.3,290.2 730.9,293.8 730.3,297.3 C729.8,300.8 729.1,304.3 728.2,307.7 C727.4,311.1 726.4,314.4 725.2,317.7 C724.1,320.9 722.8,324.1 721.4,327.2 C720.0,330.4 718.4,333.4 716.8,336.3 C715.1,339.3 713.3,342.2 711.4,344.9 C709.5,347.7 707.5,350.4 705.3,353.0 C703.2,355.5 701.0,358.0 698.6,360.4 C696.3,362.8 693.8,365.0 691.3,367.2 C688.8,369.3 686.2,371.4 683.5,373.3Z',EYE_I=[643.2,177.6,17.9],EYE_S=[638,238,37.7];
+var root=document.documentElement;
+document.addEventListener('DOMContentLoaded',function(){
+  var brand=document.getElementById('brand');
+  if(!brand||typeof anime==='undefined'||matchMedia('(prefers-reduced-motion: reduce)').matches){root.classList.remove('logo-pre');return;}
+  var wrap=document.getElementById('hdrMarkWrap'),mark=document.getElementById('hdrMark'),word=document.getElementById('hdrWord'),
+      body=document.getElementById('hdrBody'),eye=document.getElementById('hdrEye'),img=document.getElementById('hdrStartImg'),
+      letters=[].slice.call(word.querySelectorAll('span'));
+  function reset(){
+    anime.remove([mark,body,eye].concat(letters));
+    body.setAttribute('d',D_I);body.style.opacity=0;
+    eye.setAttribute('cx',EYE_I[0]);eye.setAttribute('cy',EYE_I[1]);eye.setAttribute('r',EYE_I[2]);eye.style.opacity=0;
+    img.style.opacity=1;
+    anime.set(mark,{opacity:0,translateX:(word.offsetWidth+parseFloat(getComputedStyle(word).marginLeft))/2,translateY:10,scaleX:1,scaleY:1});
+    anime.set(letters,{opacity:0,translateY:16,scale:.5,rotate:-12});
+  }
+  function play(){
+    reset();root.classList.remove('logo-pre');
+    var tl=anime.timeline({autoplay:false,easing:'easeOutCubic'});
+    tl.add({targets:mark,opacity:[0,1],translateY:[10,0],duration:600},0)
+    .add({targets:body,d:[{value:D_S}],duration:1700,easing:'easeInOutCubic',begin:function(){img.style.opacity=0;body.style.opacity=1;eye.style.opacity=1;}},700)
+    .add({targets:eye,cx:[EYE_I[0],EYE_S[0]],cy:[EYE_I[1],EYE_S[1]],r:[EYE_I[2],EYE_S[2]],duration:1700,easing:'easeInOutCubic'},700)
+    .add({targets:mark,scaleX:1.2,scaleY:.8,duration:140,easing:'easeOutQuad'},2300)
+    .add({targets:mark,scaleX:.9,scaleY:1.14,translateY:-6,duration:170,easing:'easeOutQuad'},2440)
+    .add({targets:mark,scaleX:1,scaleY:1,translateY:0,duration:800,easing:'easeOutElastic(1, .5)'},2610)
+    .add({targets:mark,translateX:0,duration:800,easing:'easeInOutCubic'},2800);
+    letters.forEach(function(l,i){tl.add({targets:l,opacity:[0,1],translateY:[16,0],scale:[.5,1],rotate:[-12,0],duration:900,easing:'easeOutElastic(1, .6)'},3000+i*85);});
+    tl.play();
+  }
+  brand.addEventListener('click',function(){
+    anime.remove(wrap);anime({targets:wrap,scaleX:[1.3,1],scaleY:[.7,1],duration:900,easing:'easeOutElastic(1, .4)'});
+  });
+  (document.fonts&&document.fonts.load?Promise.race([document.fonts.load('700 1em Fredoka'),new Promise(function(r){setTimeout(r,1500)})]):Promise.resolve()).catch(function(){}).then(play);
+});
+})();
+</script>
+</body>
+</html>
